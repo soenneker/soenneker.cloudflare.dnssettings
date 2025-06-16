@@ -79,9 +79,9 @@ public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
         try
         {
             CloudflareOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
-            var requestBody = new Dnssec_edit_dnssec_status_RequestBody_application_json
+            var requestBody = new Dnssec_edit_dnssec_status
             {
-                Status = Dnssec_edit_dnssec_status_RequestBody_application_json_status.Active
+                Status = Dnssec_edit_dnssec_status_status.Active
             };
             Dnssec_dnssec_response_single? response = await client.Zones[zoneId].Dnssec.PatchAsync(requestBody, cancellationToken: cancellationToken).NoSync();
             bool success = response.Success ?? false;
@@ -110,9 +110,9 @@ public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
         try
         {
             CloudflareOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
-            var requestBody = new Dnssec_edit_dnssec_status_RequestBody_application_json
+            var requestBody = new Dnssec_edit_dnssec_status
             {
-                Status = Dnssec_edit_dnssec_status_RequestBody_application_json_status.Disabled
+                Status = Dnssec_edit_dnssec_status_status.Disabled
             };
             Dnssec_dnssec_response_single? response = await client.Zones[zoneId].Dnssec.PatchAsync(requestBody, cancellationToken: cancellationToken).NoSync();
             bool success = response.Success ?? false;
