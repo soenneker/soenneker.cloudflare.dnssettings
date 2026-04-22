@@ -1,20 +1,19 @@
-﻿using Soenneker.Cloudflare.DnsSettings.Abstract;
-using Soenneker.Tests.FixturedUnit;
-using Xunit;
+using Soenneker.Cloudflare.DnsSettings.Abstract;
+using Soenneker.Tests.HostedUnit;
 
 namespace Soenneker.Cloudflare.DnsSettings.Tests;
 
-[Collection("Collection")]
-public sealed class CloudflareDnsSettingsUtilTests : FixturedUnitTest
+[ClassDataSource<Host>(Shared = SharedType.PerTestSession)]
+public sealed class CloudflareDnsSettingsUtilTests : HostedUnitTest
 {
     private readonly ICloudflareDnsSettingsUtil _util;
 
-    public CloudflareDnsSettingsUtilTests(Fixture fixture, ITestOutputHelper output) : base(fixture, output)
+    public CloudflareDnsSettingsUtilTests(Host host) : base(host)
     {
         _util = Resolve<ICloudflareDnsSettingsUtil>(true);
     }
 
-    [Fact]
+    [Test]
     public void Default()
     {
 
