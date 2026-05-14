@@ -1,4 +1,4 @@
-﻿using System.Threading;
+using System.Threading;
 using System.Threading.Tasks;
 using Soenneker.Cloudflare.OpenApiClient.Models;
 
@@ -23,7 +23,7 @@ public interface ICloudflareDnsSettingsUtil
     /// <param name="zoneId">The Cloudflare zone ID</param>
     /// <param name="cancellationToken">Optional cancellation token</param>
     /// <returns>The DNSSEC details including multi-signer, presigned, and NSEC3 settings</returns>
-    ValueTask<Dnssec_dnssec?> GetDnssecDetails(string zoneId, CancellationToken cancellationToken = default);
+    ValueTask<DnssecDnssec?> GetDnssecDetails(string zoneId, CancellationToken cancellationToken = default);
 
     /// <summary>
     /// Enables DNSSEC for a zone

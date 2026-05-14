@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -29,8 +29,8 @@ public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
         try
         {
             CloudflareOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
-            Dnssec_dnssec_response_single? response = await client.Zones[zoneId].Dnssec.GetAsync(cancellationToken: cancellationToken).NoSync();
-            bool isActive = response.Result?.Status == Dnssec_status.Active;
+            DnssecDnssecResponseSingle? response = await client.Zones[zoneId].Dnssec.GetAsync(cancellationToken: cancellationToken).NoSync();
+            bool isActive = response.Result?.Status == DnssecStatus.Active;
             _logger.LogInformation("DNSSEC status for zone {ZoneId}: {Status}", zoneId, isActive ? "Active" : "Inactive");
             return isActive;
         }
@@ -41,13 +41,13 @@ public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
         }
     }
 
-    public async ValueTask<Dnssec_dnssec?> GetDnssecDetails(string zoneId, CancellationToken cancellationToken = default)
+    public async ValueTask<DnssecDnssec?> GetDnssecDetails(string zoneId, CancellationToken cancellationToken = default)
     {
         _logger.LogInformation("Getting DNSSEC details for zone {ZoneId}", zoneId);
         try
         {
             CloudflareOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
-            Dnssec_dnssec_response_single? response = await client.Zones[zoneId].Dnssec.GetAsync(cancellationToken: cancellationToken).NoSync();
+            DnssecDnssecResponseSingle? response = await client.Zones[zoneId].Dnssec.GetAsync(cancellationToken: cancellationToken).NoSync();
             
             if (response?.Result != null)
             {
@@ -79,11 +79,11 @@ public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
         try
         {
             CloudflareOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
-            var requestBody = new Dnssec_edit_dnssec_status
+            var requestBody = new DnssecEditDnssecStatus
             {
-                Status = Dnssec_edit_dnssec_status_status.Active
+                Status = DnssecEditDnssecStatus_status.Active
             };
-            Dnssec_dnssec_response_single? response = await client.Zones[zoneId].Dnssec.PatchAsync(requestBody, cancellationToken: cancellationToken).NoSync();
+            DnssecDnssecResponseSingle? response = await client.Zones[zoneId].Dnssec.PatchAsync(requestBody, cancellationToken: cancellationToken).NoSync();
             bool success = response.Success ?? false;
             
             if (success)
@@ -110,11 +110,11 @@ public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
         try
         {
             CloudflareOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
-            var requestBody = new Dnssec_edit_dnssec_status
+            var requestBody = new DnssecEditDnssecStatus
             {
-                Status = Dnssec_edit_dnssec_status_status.Disabled
+                Status = DnssecEditDnssecStatus_status.Disabled
             };
-            Dnssec_dnssec_response_single? response = await client.Zones[zoneId].Dnssec.PatchAsync(requestBody, cancellationToken: cancellationToken).NoSync();
+            DnssecDnssecResponseSingle? response = await client.Zones[zoneId].Dnssec.PatchAsync(requestBody, cancellationToken: cancellationToken).NoSync();
             bool success = response.Success ?? false;
             
             if (success)
