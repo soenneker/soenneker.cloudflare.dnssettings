@@ -11,7 +11,6 @@ using Soenneker.Extensions.ValueTask;
 
 namespace Soenneker.Cloudflare.DnsSettings;
 
-/// <inheritdoc cref="ICloudflareDnsSettingsUtil"/>
 public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
 {
     private readonly ICloudflareClientUtil _clientUtil;
@@ -30,9 +29,13 @@ public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
         {
             CloudflareOpenApiClient client = await _clientUtil.Get(cancellationToken).NoSync();
             DnssecDnssecResponseSingle? response = await client.Zones[zoneId].Dnssec.GetAsync(cancellationToken: cancellationToken).NoSync();
-            bool isActive = response.Result?.Status == DnssecStatus.Active;
+            bool isActive = response?.Result?.Status == DnssecStatus.Active;
             _logger.LogInformation("DNSSEC status for zone {ZoneId}: {Status}", zoneId, isActive ? "Active" : "Inactive");
             return isActive;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
         }
         catch (Exception ex)
         {
@@ -66,6 +69,10 @@ public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
             
             return response?.Result;
         }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
+        }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to get DNSSEC details for zone {ZoneId}. Error: {ErrorMessage}", zoneId, ex.Message);
@@ -84,7 +91,7 @@ public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
                 Status = DnssecEditDnssecStatus_status.Active
             };
             DnssecDnssecResponseSingle? response = await client.Zones[zoneId].Dnssec.PatchAsync(requestBody, cancellationToken: cancellationToken).NoSync();
-            bool success = response.Success ?? false;
+            bool success = response?.Success ?? false;
             
             if (success)
             {
@@ -96,6 +103,10 @@ public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
             }
             
             return success;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
         }
         catch (Exception ex)
         {
@@ -115,7 +126,7 @@ public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
                 Status = DnssecEditDnssecStatus_status.Disabled
             };
             DnssecDnssecResponseSingle? response = await client.Zones[zoneId].Dnssec.PatchAsync(requestBody, cancellationToken: cancellationToken).NoSync();
-            bool success = response.Success ?? false;
+            bool success = response?.Success ?? false;
             
             if (success)
             {
@@ -127,6 +138,10 @@ public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
             }
             
             return success;
+        }
+        catch (OperationCanceledException) when (cancellationToken.IsCancellationRequested)
+        {
+            throw;
         }
         catch (Exception ex)
         {
