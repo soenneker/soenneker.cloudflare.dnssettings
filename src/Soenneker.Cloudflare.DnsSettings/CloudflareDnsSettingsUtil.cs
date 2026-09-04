@@ -11,6 +11,7 @@ using Soenneker.Extensions.ValueTask;
 
 namespace Soenneker.Cloudflare.DnsSettings;
 
+/// <inheritdoc cref="ICloudflareDnsSettingsUtil" />
 public sealed class CloudflareDnsSettingsUtil : ICloudflareDnsSettingsUtil
 {
     private readonly ICloudflareClientUtil _clientUtil;
